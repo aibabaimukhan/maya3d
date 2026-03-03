@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Справочник Maya 3D</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        h1 { color: #2c3e50; font-size: clamp(1.5rem, 4vw, 2.5rem); margin-bottom: 20px;}
+
+        /* Стили для строки поиска */
+        .search-container {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            padding: 10px 0 20px 0;
+            z-index: 100;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 30px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #searchInput:focus {
+            border-color: #00bcd4;
+        }
+
+        /* Стили для категорий и списков */
+        .category {
+            margin-bottom: 40px;
+        }
+
+        .category.new-commands {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 6px solid #00bcd4;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            color: #00796b;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .category:not(.new-commands) h2 {
+            color: #2c3e50;
+        }
+
+        ul { list-style: none; }
+        
+        li {
+            padding: 12px 10px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 15px;
+            transition: background-color 0.2s;
+        }
+
+        li:hover {
+            background-color: #f9fbfb;
+            border-radius: 6px;
+        }
+
+        li:last-child { border-bottom: none; }
+
+        kbd {
+            background: #2c3e50;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: monospace;
+            white-space: nowrap;
+            box-shadow: 0 2px 0 #1a252f;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .command-desc {
+            flex: 1;
+        }
+
+        .text-only .command-desc {
+            width: 100%;
+            font-style: italic;
+            color: #666;
+        }
+
+        /* Сообщение, если ничего не найдено */
+        #noResults {
+            display: none;
+            text-align: center;
+            color: #7f8c8d;
+            padding: 20px;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Справочник команд Maya 3D</h1>
+        </header>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Поиск по клавишам или описанию (например, 'развертка' или 'Ctrl+D')..." onkeyup="searchCommands()">
+        </div>
+
+        <div id="noResults">По вашему запросу ничего не найдено 😔</div>
+
+        <div id="commandsList">
+            
+            <div class="category new-commands">
+                <h2>🔥 Новые добавленные команды</h2>
+                <ul>
+                    <li><kbd>Modify + Stack Shells</kbd> <span class="command-desc">Maya автоматически наложит одинаковые шеллы друг на друга (нужно выделить одинаковые шелы)</span></li>
+                    <li><kbd>Arrange + orient shells</kbd> <span class="command-desc">Ориентация шеллов</span></li>
+                    <li><kbd>Edit mesh + add divisions</kbd> <span class="command-desc">Добавление подразделений(subdivision)</span></li>
+                    <li><kbd>Edit mesh + circularize</kbd> <span class="command-desc">Скругление геометрии(loop tools)</span></li>
+                    <li><kbd>Edit mesh + merge to center</kbd> <span class="command-desc">Схлопывание вершин к центру</span></li>
+                    <li><kbd>Mesh tools + multi-cut</kbd> <span class="command-desc">(insert edge loop – ровные ребра) - нож для создания ребер (ctrl+ЛКМ)</span></li>
+                    <li><kbd>B</kbd> <span class="command-desc">Soft Selection - пропорциональное выделение (Чтобы изменить радиус влияния, зажми клавишу B и удерживай ЛКМ (левая кнопка мыши), потом двигай мышь влево/вправо.)</span></li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h2>Горячие клавиши</h2>
+                <ul>
+                    <li class="text-only"><span class="command-desc">Все горячие клавишы работают только в Английской раскладке</span></li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h2>Движение во вьюпорте</h2>
+                <ul>
+                    <li><kbd>F</kbd> <span class="command-desc">приближение к выделенному обьекту</span></li>
+                    <li><kbd>A</kbd> <span class="command-desc">отдолиться от камеры</span></li>
+                    <li><kbd>Alt + ЛКМ</kbd> <span class="command-desc">Движение (ПКМ, Колесико)</span></li>
+                    <li><kbd>Space + ПКМ</kbd> <span class="command-desc">меняем вид (ортогональный/обьектный)</span></li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h2>Слои</h2>
+                <ul>
+                    <li><kbd>P</kbd> <span class="command-desc">выделения детей, а потом родителя, делает слой главным</span></li>
+                    <li><kbd>Shift + P</kbd> <span class="command-desc">деление детей</span></li>
+                    <li><kbd>Ctrl + G</kbd> <span class="command-desc">создание группы для выделенных обьектов</span></li>
+                    <li class="text-only"><span class="command-desc">Выбор одного компонента и стрелка вверх выделяет все элементы группы</span></li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h2>Инструменты</h2>
+                <ul>
+                    <li><kbd>Q</kbd> <span class="command-desc">инструмент выбора</span></li>
+                    <li><kbd>W</kbd> <span class="command-desc">инструмент передвижения</span></li>
+                    <li><kbd>E</kbd> <span class="command-desc">инструмент поворот</span></li>
+                    <li><kbd>R</kbd> <span class="command-desc">инструмент масштабирования</span></li>
+                    <li><kbd>Ctrl + D</kbd> <span class="command-desc">дублировать обьект</span></li>
+                    <li><kbd>Shift + ЛКМ</kbd> <span class="command-desc">клонирование обьекта</span></li>
+                    <li><kbd>Shift + D</kbd> <span class="command-desc">повтор последнего движения</span></li>
+                    <li><kbd>J</kbd> <span class="command-desc">шаг на 5</span></li>
+                    <li><kbd>Shift + ПКМ</kbd> <span class="command-desc">добавление обьектов</span></li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h2>Работа в режиме Компонентный (режим редактора)</h2>
+                <ul>
+                    <li><kbd>F8</kbd> <span class="command-desc">переключения в обьектный и компонентный режим</span></li>
+                    <li><kbd>F9</kbd> <span class="command-desc">выбор вершин</span></li>
+                    <li><kbd>F10</kbd> <span class="command-desc">выбор ребер</span></li>
+                    <li><kbd>F11</kbd> <span class="command-desc">выбор граней</span></li>
+                    <li><kbd>Ctrl + E</kbd> <span class="command-desc">екструдирование</span></li>
+                    <li><kbd>Ctrl + B</kbd> <span class="command-desc">bevel/фаска скругление краев обьекта</span></li>
+                    <li><kbd>Mesh + Fill hole</kbd> <span class="command-desc">сшивает 2 обьекта друг к другу</span></li>
+                    <li><kbd>Mesh + mirror</kbd> <span class="command-desc">отзеркаливание</span></li>
+                    <li><kbd>Edit mesh + Merge to center</kbd> <span class="command-desc">сшивает вертехсы в центре</span></li>
+                    <li><kbd>Edit mesh + Extract(Detach)</kbd> <span class="command-desc">разделяет обьект на 2</span></li>
+                    <li><kbd>Edit mesh + Bridge</kbd> <span class="command-desc">Сшивание обьекта полигонами</span></li>
+                    <li><kbd>Mesh display + reverse</kbd> <span class="command-desc">Меняет внешнюю сторону на внутренную</span></li>
+                    <li><kbd>Mesh display + harden</kbd> <span class="command-desc">harden edge (soften edge, soften/harden) – сглаживание или заострение</span></li>
+                    <li><kbd>Ctrl + del</kbd> <span class="command-desc">удаление ребер и вершин из меша</span></li>
+                    <li><kbd>Mesh tools + multi-cut</kbd> <span class="command-desc">(insert edge loop – ровные ребра) - нож для создания ребер (ctrl+ЛКМ)</span></li>
+                    <li><kbd>Mesh tools + target weld</kbd> <span class="command-desc">сшивает вершины друг к другу</span></li>
+                    <li><kbd>Modify + Freeze</kbd> <span class="command-desc">Freeze Transformations – сброс трансформации обьекта</span></li>
+                    <li><kbd>4</kbd> <span class="command-desc">отображение сетки обьекта</span></li>
+                    <li><kbd>5</kbd> <span class="command-desc">отображение обьекта</span></li>
+                    <li><kbd>Select + Contiguous edges</kbd> <span class="command-desc">Если не выделяются ребра по контуру</span></li>
+                    <li><kbd>Create + lights</kbd> <span class="command-desc">все имеющиеся света</span></li>
+                    <li><kbd>Create + Cameras</kbd> <span class="command-desc">все камеры</span></li>
+                    <li><kbd>ПКМ (удерж.)</kbd> <span class="command-desc">меню для выбора компонента</span></li>
+                    <li><kbd>2ЛКМ</kbd> <span class="command-desc">выделение (вершин, ребра и граней) по контуру до определенной точки с зажатым shift</span></li>
+                    <li><kbd>Ctrl + 1</kbd> <span class="command-desc">показывает только выделенный обьект</span></li>
+                    <li><kbd>Ctrl + H</kbd> <span class="command-desc">скрыть выделенный обьект</span></li>
+                    <li><kbd>Edit mesh + add divisions</kbd> <span class="command-desc">Добавление подразделений</span></li>
+                    <li><kbd>Edit mesh + circularize</kbd> <span class="command-desc">Скругление геометрии</span></li>
+                    <li><kbd>Edit mesh + collapse</kbd> <span class="command-desc">Схлопывание (коллапс) элементов</span></li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h2>Центр обьекта pivot</h2>
+                <ul>
+                    <li><kbd>Insert</kbd> <span class="command-desc">(D-удержание) – движение центра обьекта</span></li>
+                    <li><kbd>V</kbd> <span class="command-desc">привязка центра к вершинам других обьектов</span></li>
+                    <li><kbd>X</kbd> <span class="command-desc">привязка к сетке(grid)</span></li>
+                    <li><kbd>D + V</kbd> <span class="command-desc">перемещение pivot с привязкой к вершинам</span></li>
+                    <li class="text-only"><span class="command-desc">Возвращение pivot к центру обьекта выполняется Modify – Center pivot (рекомендуется добавить в custom)</span></li>
+                    <li class="text-only"><span class="command-desc">Изменение чувствительности гизмы клавиша (+/-) (стрелки X-Y-Z)</span></li>
+                    <li><kbd>Alt + shift + D</kbd> <span class="command-desc">отчистка истории(edit + delete by type + history)</span></li>
+                    <li><kbd>ПКМ + assign</kbd> <span class="command-desc">assign existing matireal+lambert – Присваеваем дефолтный материал обратно</span></li>
+                    <li><kbd>Ctr + Shift + ЛКМ</kbd> <span class="command-desc">Добавления инструмента в блок быстрых(постоянно используемых) инструментов в custom</span></li>
+                    <li><kbd>Tool settings</kbd> <span class="command-desc">move snap settings + retaine component spacing – вставляем правильную привязку pivot</span></li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h2>Анимация</h2>
+                <ul>
+                    <li><kbd>Alt + V</kbd> <span class="command-desc">воспроизведение анимации</span></li>
+                    <li><kbd>Alt + (&lt;/&gt;)</kbd> <span class="command-desc">передвижение по кадрам (вперед/назад)</span></li>
+                    <li><kbd>K + ЛКМ</kbd> <span class="command-desc">передвижение по кадрам</span></li>
+                    <li class="text-only"><span class="command-desc">Создание ключевых кадров, а так же удаление</span></li>
+                    <li><kbd>ПКМ + Key Selected</kbd> <span class="command-desc">(channels-свойство) добавление ключевых кадров</span></li>
+                    <li><kbd>S</kbd> <span class="command-desc">добавление ключевых кадров для всех свойств обьекта</span></li>
+                    <li><kbd>Shift + (W-E-R)</kbd> <span class="command-desc">добавление ключевых кадров по (перемещению-поворота-увеличению)</span></li>
+                    <li><kbd>Shift + ЛКМ</kbd> <span class="command-desc">(на выбранном кадре) дает возможность переместить кадр</span></li>
+                    <li><kbd>ПКМ + Delete Selected</kbd> <span class="command-desc">(channels-свойство) удаление кадров</span></li>
+                    <li><kbd>Windows + animation</kbd> <span class="command-desc">animation editors + graph editor – графически редактор анимации</span></li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h2>UV Развертка</h2>
+                <ul>
+                    <li><kbd>UV + UV Editor</kbd> <span class="command-desc">открытие окна развертки</span></li>
+                    <li><kbd>UV + Camera-based</kbd> <span class="command-desc">показ 3D модели в 3D виде на развертке</span></li>
+                    <li><kbd>UV + Panel</kbd> <span class="command-desc">показ 3D модели в 3D виде на развертке</span></li>
+                    <li><kbd>Edit + Delete</kbd> <span class="command-desc">(UV Editor) удаление развертки</span></li>
+                    <li><kbd>UV Toolkit + Cut</kbd> <span class="command-desc">Cut and Sew + Cut(shift + ПКМ) – определение разреза белыми ребрами(mark seem)</span></li>
+                    <li><kbd>UV Toolkit + Unfold</kbd> <span class="command-desc">Unfold + Unfold (shift + ПКМ) – Развертка (Деление)</span></li>
+                    <li><kbd>UV Editor + Layout</kbd> <span class="command-desc">Modify + Layout (ctr+L) – Позиционирует развертку автоматически</span></li>
+                    <li><kbd>UV Editor + Layout Along</kbd> <span class="command-desc">Modify + Layout Along – Позиционирует развертку в ряд</span></li>
+                    <li><kbd>Modify + Stack Shells</kbd> <span class="command-desc">Maya автоматически наложит одинаковые шеллы друг на друга (нужно выделить одинаковые шелы)</span></li>
+                    <li><kbd>Arrange + orient shells</kbd> <span class="command-desc">Ориентация шеллов</span></li>
+                </ul>
+            </div>
+
+            <div class="category">
+                <h2>Ригг персонажа</h2>
+                <ul>
+                    <li class="text-only"><span class="command-desc">первым делом нужно сохранить персонажа в ACSII а так же сбросить всю историю и настройки</span></li>
+                    <li><kbd>File + Reference Editor</kbd> <span class="command-desc">Выбираем нашего меша</span></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function searchCommands() {
+            // Получаем текст из строки поиска и переводим в нижний регистр
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const categories = document.querySelectorAll('.category');
+            const noResultsMsg = document.getElementById('noResults');
+            let totalVisibleItems = 0;
+
+            categories.forEach(category => {
+                const items = category.querySelectorAll('li');
+                let hasVisibleItems = false;
+
+                items.forEach(item => {
+                    // Ищем совпадения в тексте всей строки (включая клавиши и описание)
+                    const text = item.textContent.toLowerCase();
+                    
+                    if (text.includes(searchInput)) {
+                        item.style.display = 'flex'; // Показываем элемент
+                        hasVisibleItems = true;
+                        totalVisibleItems++;
+                    } else {
+                        item.style.display = 'none'; // Скрываем элемент
+                    }
+                });
+
+                // Скрываем или показываем весь блок категории
+                if (hasVisibleItems) {
+                    category.style.display = 'block';
+                } else {
+                    category.style.display = 'none';
+                }
+            });
+
+            // Показываем сообщение "Ничего не найдено", если результатов нет
+            if (totalVisibleItems === 0) {
+                noResultsMsg.style.display = 'block';
+            } else {
+                noResultsMsg.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
